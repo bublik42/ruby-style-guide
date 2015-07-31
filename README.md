@@ -234,14 +234,9 @@ Translations of the guide are available in the following languages:
   # good - space after { and before }
   { one: 1, two: 2 }
 
-  # good - no space after { and before }
+  # bad - no space after { and before }
   {one: 1, two: 2}
   ```
-
-  The first variant is slightly more readable (and arguably more
-  popular in the Ruby community in general). The second variant has
-  the advantage of adding visual difference between block and hash
-  literals. Whichever one you pick - apply it consistently.
 
 * <a name="no-spaces-braces"></a>
   No spaces after `(`, `[` or before `]`, `)`.
@@ -331,22 +326,6 @@ Translations of the guide are available in the following languages:
   else
     calc_something_else
   end
-
-  # good - it's apparent what's going on
-  kind = case year
-         when 1850..1889 then 'Blues'
-         when 1890..1909 then 'Ragtime'
-         when 1910..1929 then 'New Orleans Jazz'
-         when 1930..1939 then 'Swing'
-         when 1940..1950 then 'Bebop'
-         else 'Jazz'
-         end
-
-  result = if some_cond
-             calc_something
-           else
-             calc_something_else
-           end
 
   # good (and a bit more width efficient)
   kind =
@@ -445,12 +424,10 @@ Translations of the guide are available in the following languages:
   ```
 
 * <a name="consistent-multi-line-chains"></a>
-    Adopt a consistent multi-line method chaining style. There are two
-    popular styles in the Ruby community, both of which are considered
-    good - leading `.` (Option A) and trailing `.` (Option B).
+    good - leading `.`
 <sup>[[link](#consistent-multi-line-chains)]</sup>
 
-  * **(Option A)** When continuing a chained method invocation on
+  * When continuing a chained method invocation on
     another line keep the `.` on the second line.
 
     ```Ruby
@@ -462,23 +439,6 @@ Translations of the guide are available in the following languages:
     one.two.three
       .four
     ```
-
-  * **(Option B)** When continuing a chained method invocation on another line,
-    include the `.` on the first line to indicate that the
-    expression continues.
-
-    ```Ruby
-    # bad - need to read ahead to the second line to know that the chain continues
-    one.two.three
-      .four
-
-    # good - it's immediately clear that the expression continues beyond the first line
-    one.two.three.
-      four
-    ```
-
-  A discussion on the merits of both alternative styles can be found
-  [here](https://github.com/bbatsov/ruby-style-guide/pull/176).
 
 * <a name="no-double-indent"></a>
     Align the parameters of a method call if they span more than one
@@ -502,7 +462,7 @@ Translations of the guide are available in the following languages:
         body: source.text)
   end
 
-  # good
+  # bad
   def send_mail(source)
     Mailer.deliver(to: 'bob@example.com',
                    from: 'us@example.com',
@@ -772,7 +732,7 @@ Translations of the guide are available in the following languages:
 <sup>[[link](#ternary-operator)]</sup>
 
   ```Ruby
-  # bad
+  # badish
   result = if some_condition then something else something_else end
 
   # good
@@ -874,31 +834,6 @@ Translations of the guide are available in the following languages:
   unless x.nil?
     # body omitted
   end
-  ```
-
-* <a name="no-and-or-or"></a>
-  The `and` and `or` keywords are banned. It's just not worth it. Always use
-  `&&` and `||` instead.
-<sup>[[link](#no-and-or-or)]</sup>
-
-  ```Ruby
-  # bad
-  # boolean expression
-  if some_condition and some_other_condition
-    do_something
-  end
-
-  # control flow
-  document.saved? or document.save!
-
-  # good
-  # boolean expression
-  if some_condition && some_other_condition
-    do_something
-  end
-
-  # control flow
-  document.saved? || document.save!
   ```
 
 * <a name="no-multiline-ternary"></a>
@@ -1831,7 +1766,7 @@ no parameters.
 
 * <a name="map-find-select-reduce-size"></a>
   Prefer `map` over `collect`, `find` over `detect`, `select` over `find_all`,
-  `reduce` over `inject` and `size` over `length`. This is not a hard
+  and `size` over `length`. This is not a hard
   requirement; if the use of the alias enhances readability, it's ok to use it.
   The rhyming methods are inherited from Smalltalk and are not common in other
   programming languages. The reason the use of `select` is encouraged over
@@ -1984,15 +1919,15 @@ no parameters.
   as the class/module, but replacing CamelCase with snake_case.
 <sup>[[link](#one-class-per-file)]</sup>
 
-* <a name="screaming-snake-case"></a>
-  Use `SCREAMING_SNAKE_CASE` for other constants.
+* <a name="camel-case-constants"></a>
+  Use `CamelCase` for other constants.
 <sup>[[link](#screaming-snake-case)]</sup>
 
   ```Ruby
-  # bad
+  # good
   SomeConst = 5
 
-  # good
+  # bad
   SOME_CONST = 5
   ```
 
@@ -2203,7 +2138,7 @@ no parameters.
     CustomErrorKlass = Class.new(StandardError)
 
     # constants are next
-    SOME_CONSTANT = 20
+    SomeConstant = 20
 
     # afterwards we have attribute macros
     attr_reader :name
@@ -2352,26 +2287,6 @@ no parameters.
   [SOLID](http://en.wikipedia.org/wiki/SOLID_\(object-oriented_design\)) as
   possible.
 <sup>[[link](#solid-design)]</sup>
-
-* <a name="define-to-s"></a>
-  Always supply a proper `to_s` method for classes that represent domain
-  objects.
-<sup>[[link](#define-to-s)]</sup>
-
-  ```Ruby
-  class Person
-    attr_reader :first_name, :last_name
-
-    def initialize(first_name, last_name)
-      @first_name = first_name
-      @last_name = last_name
-    end
-
-    def to_s
-      "#{@first_name} #{@last_name}"
-    end
-  end
-  ```
 
 * <a name="attr_family"></a>
   Use the `attr` family of functions to define trivial accessors or mutators.
@@ -2596,58 +2511,8 @@ no parameters.
   end
   ```
 
-* <a name="alias-method-lexically"></a>
-  Prefer `alias` when aliasing methods in lexical class scope as the
-  resolution of `self` in this context is also lexical, and it communicates
-  clearly to the user that the indirection of your alias will not be altered
-  at runtime or by any subclass unless made explicit.
-<sup>[[link](#alias-method-lexically)]</sup>
-
-  ```Ruby
-  class Westerner
-    def first_name
-      @names.first
-    end
-
-    alias given_name first_name
-  end
-  ```
-
-  Since `alias`, like `def`, is a keyword, prefer bareword arguments over
-  symbols or strings. In other words, do `alias foo bar`, not
-  `alias :foo :bar`.
-
-  Also be aware of how Ruby handles aliases and inheritance: an alias
-  references the method that was resolved at the time the alias was defined;
-  it is not dispatched dynamically.
-
-  ```Ruby
-  class Fugitive < Westerner
-    def first_name
-      'Nobody'
-    end
-  end
-  ```
-
-  In this example, `Fugitive#given_name` would still call the original
-  `Westerner#first_name` method, not `Fugitive#first_name`. To override the
-  behavior of `Fugitive#given_name` as well, you'd have to redefine it in the
-  derived class.
-
-  ```Ruby
-  class Fugitive < Westerner
-    def first_name
-      'Nobody'
-    end
-
-    alias given_name first_name
-  end
-  ```
-
 * <a name="alias-method"></a>
-  Always use `alias_method` when aliasing methods of modules, classes, or
-  singleton classes at runtime, as the lexical scope of `alias` leads to
-  unpredictability in these cases.
+  Always use `alias_method`.
 <sup>[[link](#alias-method)]</sup>
 
   ```Ruby
