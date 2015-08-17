@@ -3069,7 +3069,7 @@ resource cleanup when possible.
   quotes by default (Option A) and double quotes by default (Option B).
 <sup>[[link](#consistent-string-literals)]</sup>
 
-  * **(Option A)** Prefer single-quoted strings when you don't need
+  * Prefer single-quoted strings when you don't need
     string interpolation or special symbols such as `\t`, `\n`, `'`,
     etc.
 
@@ -3080,19 +3080,6 @@ resource cleanup when possible.
     # good
     name = 'Bozhidar'
     ```
-
-  * **(Option B)** Prefer double-quotes unless your string literal
-    contains `"` or escape characters you want to suppress.
-
-    ```Ruby
-    # bad
-    name = 'Bozhidar'
-
-    # good
-    name = "Bozhidar"
-    ```
-
-  The string literals in this guide are aligned with the first style.
 
 * <a name="no-character-literals"></a>
   Don't use the character literal syntax `?x`. Since Ruby 1.9 it's basically
@@ -3188,22 +3175,6 @@ resource cleanup when possible.
     str.tr("-", "_")
     ```
 
-* <a name="heredocs"></a>
-  When using heredocs for multi-line strings keep in mind the fact that they
-  preserve leading whitespace. It's a good practice to employ some margin based
-  on which to trim the excessive whitespace.
-<sup>[[link](#heredocs)]</sup>
-
-  ```Ruby
-  code = <<-END.gsub(/^\s+\|/, '')
-    |def test
-    |  some_method
-    |  other_method
-    |end
-  END
-  # => "def test\n  some_method\n  other_method\nend\n"
-  ```
-
 ## Regular Expressions
 
 > Some people, when confronted with a problem, think
@@ -3248,23 +3219,6 @@ resource cleanup when possible.
 
   # good
   process Regexp.last_match(1)
-  ```
-
-* <a name="no-numbered-regexes"></a>
-  Avoid using numbered groups as it can be hard to track what they contain.
-  Named groups can be used instead.
-<sup>[[link](#no-numbered-regexes)]</sup>
-
-  ```Ruby
-  # bad
-  /(regexp)/ =~ string
-  ...
-  process Regexp.last_match(1)
-
-  # good
-  /(?<meaningful_var>regexp)/ =~ string
-  ...
-  process meaningful_var
   ```
 
 * <a name="limit-escapes"></a>
